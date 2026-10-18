@@ -3,6 +3,15 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 
+
+/* TODO:
+ * Set up application to have basic functionality [done]
+ * Create basic layout with textarea for simple standard form polynomial (up to two degrees)
+ * Present factorization in more appealing way
+ * Remove spaces within equation as to make it easier to parse
+ * add dropdown menu for degrees (and update functionality!)
+ */
+
 public class main extends JFrame {
     private JTextField f1;
     private JButton b;
@@ -17,7 +26,7 @@ public class main extends JFrame {
         this.setSize(300,300);
 
 
-        JPanel contentPane = new JPanel(null);
+        JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(100,100,100));
         contentPane.setPreferredSize(new Dimension(300, 150));
         
@@ -103,7 +112,7 @@ public class main extends JFrame {
     public String calculation(String values)
     {
 
-        String value1 = values.substring(0,values.indexOf("b"));
+        String value1 = values.substring(1,values.indexOf("b"));
         int a = Integer.parseInt(value1);
         String value2 = values.substring((values.indexOf("b")+1), values.indexOf("c"));
         int b = Integer.parseInt(value2);
