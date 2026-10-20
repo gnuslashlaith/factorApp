@@ -15,7 +15,6 @@ import java.util.*;
 public class main extends JFrame {
     private JTextField f1;
     private JButton b;
-    private JLabel l1;
     private JLabel l2;
 
 
@@ -23,17 +22,18 @@ public class main extends JFrame {
     public main()
     {
         this.setTitle("Factoring App");
-        this.setSize(300,300);
+        this.setSize(1000,1000);
 
 
-        JPanel contentPane = new JPanel();
+        JPanel contentPane = new JPanel(null);
         contentPane.setBackground(new Color(100,100,100));
-        contentPane.setPreferredSize(new Dimension(300, 150));
+        contentPane.setPreferredSize(new Dimension(1000, 1000));
         
 
         b = new JButton();
         b.setEnabled(true);
         b.setText("Submit");
+        b.setBounds(850,50,100,50);
         b.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
@@ -41,16 +41,16 @@ public class main extends JFrame {
             }
         });
 
-        l1 = new JLabel("Enter expression: ");
         l2 = new JLabel("answer");
+        l2.setBounds(500,500,400,400);
         
         f1 = new JTextField();
-        f1.setText("Enter");
+        f1.setText("Enter Expression");
+        f1.setBounds(75,50,750,50);
         f1.setEnabled(true);
 
         contentPane.add(f1);
         contentPane.add(b);
-        contentPane.add(l1);
         contentPane.add(l2);
        
 
@@ -74,18 +74,47 @@ public class main extends JFrame {
     public String getValues(String exp)
     {
 
+        String expNoSpace = exp.replaceAll("\\s+", "");
+
+
 
         int a;
         int b;
         int c;
         // first,second, and third occurance of space
-        int placeFirstSpace = exp.indexOf(" ");
-        int placeSecondSpace = exp.indexOf(" ", placeFirstSpace + 1);
-        int placeThirdSpace = exp.indexOf(" ", placeSecondSpace + 1);
-        int placeFourthSpace = exp.indexOf(" ", placeThirdSpace + 1);
 
-        int placeFx = exp.indexOf("x");
-        String as = exp.substring(0, placeFx);
+
+        int placeFirstTerm = 0;
+        int placeSecondTerm = 0;
+
+        // int placeThirdSpace = exp.indexOf(" ", placeSecondSpace + 1);
+        // int placeFourthSpace = exp.indexOf(" ", placeThirdSpace + 1);
+
+
+        if(exp.contains("+") && exp.contains("-"))
+        {
+            int placePlus = expNoSpace.indexOf("+");
+            int placeMinus = expNoSpace.indexOf("-");
+
+            if(placePlus < placeMinus)
+            {
+                placeFirstTerm = placePlus; 
+                placeSecondTerm = placeMinus; 
+            } else if (placePlus > placeMinus) {
+                placeFirstTerm = placeMinus;
+                placeSecondTerm = placePlus;
+            }
+
+        } else if (exp.contains("+") && !exp.contains("-")) {
+            placeFirstTerm = expNoSpace.indexOf("+");
+            placeSecondTerm = expNoSpace.indexOf("+", placeFirstTerm + 1);
+        } else if (exp.contains("-") && !exp.contains("+")) {
+            placeFirstTerm = expNoSpace.indexOf("-");
+            placeSecondTerm = expNoSpace.indexOf("-", placeFirstTerm + 1);
+        }
+
+        int placeFx = expNoSpace.indexOf("x");
+        String as = expNoSpace.substring(0,placeFx );
 
         if(as == "")
         {
@@ -96,13 +125,15 @@ public class main extends JFrame {
             a = Integer.parseInt(as);
         }
 
-        int placeSx = exp.indexOf("x", placeFx +1);
+
+
+        int placeSx = expNoSpace.indexOf("x", placeFx +1);
         
-        String bs = exp.substring((placeSecondSpace + 1), placeSx);
+        String bs = expNoSpace.substring((placeFirstTerm+1), placeSx);
         b = Integer.parseInt(bs);
 
 
-        String cs = exp.substring((placeFourthSpace + 1));
+        String cs = expNoSpace.substring((placeSecondTerm+ 1));
         c = Integer.parseInt(cs);
 
 
@@ -126,14 +157,14 @@ public class main extends JFrame {
 
         if(discriminant < 0)
         {
-            return null;
+            return "INVALID: No Real Solution";
         }
 
 
         factor1 = (-b + Math.sqrt(discriminant)) / (2*a);
         factor2 = (-b - Math.sqrt(discriminant)) / (2*a);
 
-        return factor1 + " " + factor2; 
+        return "x1 = " + factor1 + "  x2 = " + factor2; 
 
 
 
@@ -146,7 +177,17 @@ public class main extends JFrame {
             String values = getValues(f1.getText());
             String answer = calculation(values);
 
-            l2.setText(answer);
+            if(answer == "INVALID: No Real Solution")
+            {
+                l2.setBackground(Color.RED);
+                l2.setText("No Real Solution! Negative Discriminant");
+
+            } else {
+                l2.setText(answer);
+
+            }
+
+
 
 
         
