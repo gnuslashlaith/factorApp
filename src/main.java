@@ -6,9 +6,9 @@ import java.util.*;
 
 /* TODO:
  * Set up application to have basic functionality [done]
- * Create basic layout with textarea for simple standard form polynomial (up to two degrees)
+ * Create basic layout for simple standard form polynomial (up to two degrees)
  * Present factorization in more appealing way
- * Remove spaces within equation as to make it easier to parse
+ * Remove spaces within equation as to make it easier to parse [done]
  * add dropdown menu for degrees (and update functionality!)
  */
 
@@ -42,7 +42,8 @@ public class main extends JFrame {
         });
 
         l2 = new JLabel("answer");
-        l2.setBounds(500,500,400,400);
+        l2.setBounds(75, 100, 800, 50);
+        l2.setPreferredSize(new Dimension(800,400));
         
         f1 = new JTextField();
         f1.setText("Enter Expression");
@@ -87,6 +88,7 @@ public class main extends JFrame {
         int placeFirstTerm = 0;
         int placeSecondTerm = 0;
 
+
         // int placeThirdSpace = exp.indexOf(" ", placeSecondSpace + 1);
         // int placeFourthSpace = exp.indexOf(" ", placeThirdSpace + 1);
 
@@ -99,6 +101,7 @@ public class main extends JFrame {
             if(placePlus < placeMinus)
             {
                 placeFirstTerm = placePlus; 
+
                 placeSecondTerm = placeMinus; 
             } else if (placePlus > placeMinus) {
                 placeFirstTerm = placeMinus;
@@ -107,11 +110,13 @@ public class main extends JFrame {
 
         } else if (exp.contains("+") && !exp.contains("-")) {
             placeFirstTerm = expNoSpace.indexOf("+");
+            
             placeSecondTerm = expNoSpace.indexOf("+", placeFirstTerm + 1);
         } else if (exp.contains("-") && !exp.contains("+")) {
             placeFirstTerm = expNoSpace.indexOf("-");
             placeSecondTerm = expNoSpace.indexOf("-", placeFirstTerm + 1);
         }
+
 
         int placeFx = expNoSpace.indexOf("x");
         String as = expNoSpace.substring(0,placeFx );
@@ -127,16 +132,18 @@ public class main extends JFrame {
 
 
 
+
         int placeSx = expNoSpace.indexOf("x", placeFx +1);
         
-        String bs = expNoSpace.substring((placeFirstTerm+1), placeSx);
+        String bs = expNoSpace.substring((placeFirstTerm), placeSx);
         b = Integer.parseInt(bs);
 
 
-        String cs = expNoSpace.substring((placeSecondTerm+ 1));
+        String cs = expNoSpace.substring((placeSecondTerm));
         c = Integer.parseInt(cs);
 
 
+        System.out.println("a:  " + a + " b: " + b + " c: " + c);  
         return "a" + a + "b" + b + "c" + c;
 
     }
@@ -161,8 +168,8 @@ public class main extends JFrame {
         }
 
 
-        factor1 = (-b + Math.sqrt(discriminant)) / (2*a);
-        factor2 = (-b - Math.sqrt(discriminant)) / (2*a);
+        factor1 = ((-1*b) + Math.sqrt(discriminant)) / (2*a);
+        factor2 = ((-1*b) - Math.sqrt(discriminant)) / (2*a);
 
         return "x1 = " + factor1 + "  x2 = " + factor2; 
 
@@ -179,7 +186,6 @@ public class main extends JFrame {
 
             if(answer == "INVALID: No Real Solution")
             {
-                l2.setBackground(Color.RED);
                 l2.setText("No Real Solution! Negative Discriminant");
 
             } else {
